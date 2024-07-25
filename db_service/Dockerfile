@@ -1,9 +1,16 @@
-FROM python:3.8-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
 COPY . /app
 
-RUN pip install Flask sqlite3
+RUN ls -la /app
+RUN cat /app/requirements.txt
 
-CMD ["python", "app/db_service.py"]
+# Redirect the output of pip install to a file
+RUN pip install -r requirements.txt > pip_install.log 2>&1
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+
+CMD ["python","-u", "app/db_service.py"]
